@@ -1,0 +1,19 @@
+{
+    "name": "backendserver",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "nodemon app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Kevin Trujillo",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.16.3",
+        "mongoose": "^5.0.11"
+    },
+    "devDependencies": {
+        "nodemon": "^1.17.2"
+    }
+}
