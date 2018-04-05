@@ -8,7 +8,12 @@ var Usuario = require("../models/usuario");
 
 app.get('/', (req, res, next) => {
 
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+
     Usuario.find({}, 'nombre email imagen rol')
+        .skip(desde)
+        .limit(5)
         .exec(
             (err, usuarios) => {
                 if (err) {
@@ -18,11 +23,15 @@ app.get('/', (req, res, next) => {
                         errors: err
                     });
                 }
-                res.status(200).json({
-                    ok: true,
-                    message: "Usuarios",
-                    usuarios: usuarios
-                });
+                Usuario.count({}, (err, conteo) => {
+                    res.status(200).json({
+                        ok: true,
+                        message: "Usuarios",
+                        usuarios: usuarios,
+                        total: conteo
+                    });
+                })
+
 
             });
 });
@@ -80,10 +89,20 @@ app.post('/', middlewareAuth.verificaToken, (req, res) => {
                 errors: err
             });
         }
+        if (!usuarioGuardado) {
+            return res.status(404).json({
+                ok: false,
+                message: "El usuario no existe",
+                errors: err
+            });
+        }
+
         res.status(200).json({
             ok: true,
-            body: usuarioGuardado
+            usuario: usuarioGuardado,
+            logged: req.usuario
         });
+
     });
 });
 
